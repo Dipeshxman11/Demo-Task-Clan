@@ -18,18 +18,24 @@ async function fetchTasks() {
 
 // Function to display tasks
 function displayTasks(tasks) {
-  taskList.innerHTML = '';
   tasks.forEach(task => {
-    const taskItem = document.createElement('div');
-    taskItem.innerHTML = `
-      <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask('${task._id}')">
-      <strong>${task.title}</strong>
-      <p>${task.description}</p>
-      <button onclick="deleteTask('${task._id}')">Delete</button>
-    `;
-    taskList.appendChild(taskItem);
+    // Check if task with the same ID already exists in the list
+    if (!document.getElementById(task._id)) {
+      const taskItem = document.createElement('div');
+      taskItem.id = task._id; // Set the task ID as the element ID
+      taskItem.innerHTML = `
+        <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask('${task._id}')">
+        <strong>${task.title}</strong>
+        <p>${task.description}</p>
+        <button onclick="deleteTask('${task._id}')">Delete</button>
+      `;
+      taskList.appendChild(taskItem);
+    }
   });
 }
+
+
+
 
 // Event listener for form submission
 taskForm.addEventListener('submit', async (event) => {
