@@ -3,18 +3,24 @@ const taskForm = document.getElementById('taskForm');
 const titleInput = document.getElementById('titleInput');
 const descriptionInput = document.getElementById('descriptionInput');
 
+
+
+
 // Function to fetch tasks
 async function fetchTasks() {
   try {
+    console.log('Fetching tasks...');
     const response = await axios.post('http://localhost:4002/graphql', {
       query: '{ tasks { _id, title, description, completed } }'
     });
     const { data } = response.data;
+    console.log('Fetched tasks:', data.tasks);
     displayTasks(data.tasks);
   } catch (error) {
     console.error('Error fetching tasks:', error);
   }
 }
+
 
 // Function to display tasks
 function displayTasks(tasks) {
@@ -23,19 +29,32 @@ function displayTasks(tasks) {
     if (!document.getElementById(task._id)) {
       const taskItem = document.createElement('div');
       taskItem.id = task._id; // Set the task ID as the element ID
-      taskItem.innerHTML = `
-        <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask('${task._id}')">
-        <strong>${task.title}</strong>
-        <p>${task.description}</p>
-        <button onclick="deleteTask('${task._id}')">Delete</button>
-      `;
+      taskItem.innerHTML = 
+      `<div class="task-item" id="${task._id}">
+      <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask('${task._id}')">  <span class="task-title">${task.title}</span>
+  <span class="task-desc">${task.description}</span>
+  <button onclick="deleteTask('${task._id}')">Delete</button>
+</div>`
       taskList.appendChild(taskItem);
+      
+      // Focus on the newly added task
+      taskList.scrollTop = taskList.scrollHeight;
     }
   });
 }
 
+// Function to create a new task
+async function createTask(title, description) {
+  try {
 
-
+    await axios.post('http://localhost:4002/graphql', {
+      query: `mutation { createTask(input: { title: "${title}", description: "${description}"}) { _id } }`,
+    });
+    await fetchTasks();
+  } catch (error) {
+    console.error('Error creating task:', error);
+  }
+}
 
 // Event listener for form submission
 taskForm.addEventListener('submit', async (event) => {
@@ -43,16 +62,9 @@ taskForm.addEventListener('submit', async (event) => {
   const title = titleInput.value;
   const description = descriptionInput.value;
   if (title && description) {
-    try {
-      await axios.post('http://localhost:4002/graphql', {
-        query: `mutation { createTask(input: { title: "${title}", description: "${description}" }) { _id } }`,
-      });
-      titleInput.value = '';
-      descriptionInput.value = '';
-      await fetchTasks();
-    } catch (error) {
-      console.error('Error creating task:', error);
-    }
+    createTask(title, description);
+    titleInput.value = '';
+    descriptionInput.value = '';
   }
 });
 
@@ -74,7 +86,10 @@ async function deleteTask(id) {
     await axios.post('http://localhost:4002/graphql', {
       query: `mutation { deleteTask(id: "${id}") }`,
     });
-    await fetchTasks();
+    const taskElement = document.getElementById(id);
+    if (taskElement) {
+      taskElement.remove();
+    }
   } catch (error) {
     console.error('Error deleting task:', error);
   }
@@ -82,3 +97,6 @@ async function deleteTask(id) {
 
 // Initial fetch of tasks
 fetchTasks();
+
+
+
