@@ -23,7 +23,7 @@ body {
   flex-direction: column;
   gap: 5px;
   padding: 10px;
-  overflow-y: scroll; /* Change to auto */
+  overflow-y: scroll; 
 }
 
 .task-item {

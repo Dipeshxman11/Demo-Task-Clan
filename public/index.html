@@ -1,23 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Task Manager</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="container">
-    <h1>Task Manager</h1>
-    <div class="task-list-container" id="taskList"></div>
-    <form id="taskForm" class="task-form">
-      <input type="text" id="titleInput" placeholder="Enter task title" required>
-      <input type="text" id="descriptionInput" placeholder="Enter task description" required>
-      <button type="submit">Add Task</button>
-    </form>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="script.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Task Manager</h1>
+      <div class="task-list-container" id="taskList"></div>
+      <form id="taskForm" class="task-form">
+        <input
+          type="text"
+          id="titleInput"
+          placeholder="Enter task title"
+          required
+        />
+        <input
+          type="text"
+          id="descriptionInput"
+          placeholder="Enter task description"
+          required
+        />
+        <button type="submit">Add Task</button>
+      </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="script.js"></script>
+  </body>
 </html>

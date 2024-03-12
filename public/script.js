@@ -4,12 +4,8 @@ const titleInput = document.getElementById('titleInput');
 const descriptionInput = document.getElementById('descriptionInput');
 
 
-
-
-// Function to fetch tasks
 async function fetchTasks() {
   try {
-    console.log('Fetching tasks...');
     const response = await axios.post('http://localhost:4002/graphql', {
       query: '{ tasks { _id, title, description, completed } }'
     });
@@ -22,31 +18,25 @@ async function fetchTasks() {
 }
 
 
-// Function to display tasks
 function displayTasks(tasks) {
   tasks.forEach(task => {
-    // Check if task with the same ID already exists in the list
     if (!document.getElementById(task._id)) {
       const taskItem = document.createElement('div');
-      taskItem.id = task._id; // Set the task ID as the element ID
-      taskItem.innerHTML = 
-      `<div class="task-item" id="${task._id}">
+      taskItem.id = task._id;
+      taskItem.innerHTML =
+        `<div class="task-item" id="${task._id}">
       <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask('${task._id}')">  <span class="task-title">${task.title}</span>
   <span class="task-desc">${task.description}</span>
   <button onclick="deleteTask('${task._id}')">Delete</button>
 </div>`
       taskList.appendChild(taskItem);
-      
-      // Focus on the newly added task
       taskList.scrollTop = taskList.scrollHeight;
     }
   });
 }
 
-// Function to create a new task
 async function createTask(title, description) {
   try {
-
     await axios.post('http://localhost:4002/graphql', {
       query: `mutation { createTask(input: { title: "${title}", description: "${description}"}) { _id } }`,
     });
@@ -56,7 +46,6 @@ async function createTask(title, description) {
   }
 }
 
-// Event listener for form submission
 taskForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   const title = titleInput.value;
@@ -68,7 +57,6 @@ taskForm.addEventListener('submit', async (event) => {
   }
 });
 
-// Function to toggle task completion status
 async function toggleTask(id) {
   try {
     await axios.post('http://localhost:4002/graphql', {
@@ -80,7 +68,6 @@ async function toggleTask(id) {
   }
 }
 
-// Function to delete a task
 async function deleteTask(id) {
   try {
     await axios.post('http://localhost:4002/graphql', {
@@ -95,7 +82,6 @@ async function deleteTask(id) {
   }
 }
 
-// Initial fetch of tasks
 fetchTasks();
 
 

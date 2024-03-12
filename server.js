@@ -22,7 +22,6 @@ const accessLogStream = fs.createWriteStream(
 
 
 
-// Create Express server
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -30,11 +29,9 @@ app.use(cors());
 app.use(morgan("combined", { stream: accessLogStream }));
 
 
-// Serve static files (HTML, CSS, JS)
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-// GraphQL endpoint
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: root,
@@ -42,7 +39,6 @@ app.use('/graphql', graphqlHTTP({
 }));
 
 
-// Connect to MongoDB
 mongoose.connect(process.env.MONGODB);
 const db = mongoose.connection;
 db.once('open', () => {
@@ -50,7 +46,6 @@ db.once('open', () => {
 });
 
 
-// Start the server
 app.listen(4002, () => {
   console.log(`Server running on port ${4002}`);
 });
